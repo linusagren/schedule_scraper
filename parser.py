@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from scraper import get_schedule
+import scraper
 
 def parse_schedule(html):
     soup = BeautifulSoup(html, "html.parser")
@@ -11,8 +11,20 @@ def parse_schedule(html):
     return None
 
 if __name__ == '__main__':
-    raw_html = get_schedule()
+    tomorrow = scraper.get_next_day()
 
-    if raw_html is not None:
-        soup = parse_schedule(raw_html)
-        
+    if tomorrow is not None:
+        raw_html = scraper.get_schedule(tomorrow)
+
+        if raw_html is not None:
+            classroom = parse_schedule(raw_html)
+
+            if classroom is not None:
+                print(f"Classroom: {classroom}")
+            else:
+                print("No class in school tomorrow.")
+        else:
+            print("Could not retrieve schedule.")
+
+    else:
+        print("No weekday schedule to check.")
