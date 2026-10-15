@@ -1,2 +1,2 @@
 # schedule_scraper
-Scrapes the schedule for AIU26 daily and returns time + classroom.
+Fetches the class schedule for AIU26 and sends classroom + time to Discord.
