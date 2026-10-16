@@ -26,6 +26,3 @@ def send_message(content: str):
         print(err)
     except requests.RequestException as err:
         print(err)
-
-if __name__ == "__main__":
-    send_message("Testing the refactored webhook!")
