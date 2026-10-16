@@ -10,21 +10,26 @@ def parse_schedule(html):
 
     return None
 
-if __name__ == '__main__':
+def get_classroom():
     tomorrow = scraper.get_next_day()
 
-    if tomorrow is not None:
-        raw_html = scraper.get_schedule(tomorrow)
+    if tomorrow is None:
+        print("No weekday schedule to check")
+        return
 
-        if raw_html is not None:
-            classroom = parse_schedule(raw_html)
+    raw_html = scraper.get_schedule(tomorrow)
 
-            if classroom is not None:
-                print(f"Classroom: {classroom}")
-            else:
-                print("No class in school tomorrow.")
-        else:
-            print("Could not retrieve schedule.")
+    if raw_html is None:
+        print("Could not retrieve schedule.")
+        return
 
-    else:
-        print("No weekday schedule to check.")
+    classroom = parse_schedule(raw_html)
+
+    if classroom is None:
+        print("No class in school tomorrow.")
+        return
+
+    return classroom
+
+if __name__ == '__main__':
+    print(get_classroom())
