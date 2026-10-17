@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="sv">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="../branding.css">
+	<link rel="stylesheet" href="./style.css">
+	<script type="module" src="./_js/main.js" defer></script>
+	<title>Schemasök - Campus Varberg</title>
+</head>
+
+<body>
+
+	<header class="ws-container">
+		<!-- CAMPUS CLICKABLE LOGO -->
+		<a id="campus-logo" href="/schemasok/" draggable="false" class="noselect">
+			<img src="/public/campus-varberg-liggande.svg" alt="Campus Varberg" draggable="false" />
+		</a>
+
+		<h1>Schemasök</h1>
+	</header>
+
+	<!-- SEARCH FORM -->
+	<section id="search-form" class="ws-container">
+		<form action="" method="GET">
+			<div class="form-row">
+				<div class="form-group">
+					<label for="startDateTime">Från</label>
+					<input type="date" name="startDateTime" id="startDateTime" value="2026-10-20">
+				</div>
+
+				<div class="form-group">
+					<label for="endDateTime">Till</label>
+					<input type="date" name="endDateTime" id="endDateTime" value="2026-10-20">
+				</div>
+			</div>
+
+			<div class="form-row">
+				<div class="form-group full-width">
+					<label for="text">Sök</label>
+					<input type="text" name="text" id="text" placeholder="Sök efter bokning..." value="AIU26">
+				</div>
+			</div>
+
+			<!-- FILTER TYPES -->
+
+			<label class="checkbox-item noselect">
+				<input type="checkbox" name="showAll" id="showCompleted" value="1" checked>
+				Inkludera bokningar vars sluttid har passerat
+			</label>
+
+			<button type="submit" class="nav-btn">Hitta bokningar</button>
+
+			<a href="./" draggable="false" id="clear-filters" class="noselect">Nollställ filter</a>
+		</form>
+	</section>
+
+	<main>
+		<div id="search-context" class="ws-container">
+
+			<p>
+				Sökningen gav 1 resultat.
+			</p>
+
+			<div id="search-results">
+
+
+				<!-- ARTICLE CARD / SEARCH RESULT -->
+				<article class="card">
+					<div class="title-container">
+						<img class="icon" aria-hidden="true" src="/public/icons/hogskola-yrkeshogskola.svg">
+						<h3>AIU26- Grundläggande programmering med Python</h3>
+					</div>
+
+					<time class="time-container" datetime="2026-10-20 08:30">
+						<img class="icon" aria-hidden="true" src="/public/icons/clock.svg">
+
+						<div class="time-content">
+							<div class="start-end-container">
+								<span class="time-start">20 oktober, 08.30</span>
+								<div>
+									&ndash; <span class="time-end">
+										17.00 </span>
+								</div>
+							</div>
+
+							<!-- p class="time-duration"> =php=htmlspecialchars($r->duration)=php= -->
+						</div>
+					</time>
+
+					<div class="location-container">
+						<div class="building">
+							<img class="icon" aria-hidden="true" src="/public/icons/house.svg">
+							B
+						</div>
+						<div class="room">
+							<img class="icon" aria-hidden="true" src="/public/icons/door.svg">
+							B126
+						</div>
+					</div>
+
+
+					<div class="description-section">
+						<p class="no-description">Ingen beskrivning tillgänglig</p>
+					</div>
+
+				</article>
+			</div>
+
+			<nav id="search-pagination">
+				<a href="?" class="nav-btn disabled">
+					Föregående
+				</a>
+
+				<span class="page-indicator">
+					<strong>1</strong> / 1 </span>
+
+				<a href="?" class="nav-btn disabled">
+					Nästa
+				</a>
+			</nav>
+		</div>
+	</main>
+</body>
+
+</html>

@@ -15,13 +15,24 @@ def get_next_day():
     else:
         return None
 
+def get_mock_schedule():
+    """
+    Attempts to fetch the schedule for class AIU26 from a html file.
+    """
+    try:
+        with open("sample.html", "r", encoding="utf-8") as f:
+            return f.read()
+    except FileNotFoundError as err:
+        print(err)
 
-def get_schedule(date_tomorrow: str):
+def get_raw_schedule(date_tomorrow: str):
     """
     Attempts to fetch the schedule for class AIU26 from the Campus website.
     """
+    class_ = "AIU26"
+
     try:
-        r = requests.get(f'https://campusvarbergtv.se/schemasok/?startDateTime={date_tomorrow}&endDateTime={date_tomorrow}&text=AIU26&showAll=1&showAll=1', timeout=10)
+        r = requests.get(f'https://campusvarbergtv.se/schemasok/?startDateTime={date_tomorrow}&endDateTime={date_tomorrow}&text={class_}&showAll=1&showAll=1', timeout=10)
         r.raise_for_status()
 
         if r.status_code == 200:

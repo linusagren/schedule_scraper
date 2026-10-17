@@ -219,5 +219,6 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-# Delete file after
+# Temp files
 temp.*
+no_results_sample.html
