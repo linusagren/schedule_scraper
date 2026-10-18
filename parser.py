@@ -4,6 +4,7 @@ import scraper
 def parse_schedule(html: str):
     soup = BeautifulSoup(html, "html.parser")
 
+    title = soup.find("div", class_="title-container")
     classroom = soup.find("div", class_="room")
     start_time = soup.find("span", class_="time-start")
     end_time = soup.find("span", class_="time-end")
@@ -15,12 +16,15 @@ def parse_schedule(html: str):
             return {"status": "no_results"}
 
         return {"status": "incomplete"}
-    
+
+    class_name, title = title.get_text().strip().split("- ", 1)
     classroom = classroom.get_text().strip()
     start_time = start_time.get_text().strip()
     end_time = end_time.get_text().strip()
 
     class_schedule = {
+        "class_name": class_name,
+        "title": title,
         "classroom": classroom,
         "start_time": start_time,
         "end_time": end_time,

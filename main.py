@@ -1,8 +1,9 @@
 from parser import get_schedule
 from webhook import send_message
+from embed import create_embed
 
 def main():
-    mode = "live" # live | mock
+    mode = "mock" # live | mock
 
     schedule = get_schedule(mode)
 
@@ -12,9 +13,8 @@ def main():
     # Status handling
     match schedule["status"]:
         case "complete":
-            room, start, end = schedule["classroom"], schedule["start_time"], schedule["end_time"]
-            message = f"Tomorrow's schedule:\nRoom: {room}\nStart: {start}\nEnd: {end}"
-            send_message(message)
+            embed_schedule = create_embed(schedule)
+            send_message(embed_schedule)
         case "incomplete":
             print("Could not retrieve full schedule.")
         case "no_results":

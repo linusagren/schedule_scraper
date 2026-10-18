@@ -1,0 +1,55 @@
+{
+    "embeds": [
+        {
+            "title": "<title>",
+            "description": "Lektion på plats",
+            "color": 19626,
+            "author": {
+                "name": "<class_name>",
+                "icon_url": "attachment://lesson.png"
+            },
+            "fields": [
+                {
+                    "name": "🚪 Klassrum",
+                    "value": "<classroom>",
+                    "inline": true
+                },
+                {
+                    "name": "🕒 Start",
+                    "value": "<start_time>",
+                    "inline": true
+                },
+                {
+                    "name": "🏁 Slut",
+                    "value": "<end_time>",
+                    "inline": true
+                }
+            ]
+        }
+    ],
+    "components": [
+        {
+            "type": 1,
+            "components": [
+                {
+                    "type": 2,
+                    "style": 5,
+                    "label": "Schemasök",
+                    "emoji": {
+                        "name": "🗓️"
+                    },
+                    "url": "https://campusvarbergtv.se/schemasok/"
+                },
+                {
+                    "type": 2,
+                    "style": 5,
+                    "label": "Learnpoint",
+                    "emoji": {
+                        "name": "💻"
+                    },
+                    "url": "https://campusvarberg.learnpoint.se/"
+                }
+            ]
+        }
+    ]
+}
