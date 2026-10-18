@@ -31,8 +31,15 @@ def get_raw_schedule(date_tomorrow: str):
     """
     class_ = "AIU26"
 
+    params = {
+        "startDateTime": date_tomorrow,
+        "endDateTime": date_tomorrow,
+        "text": class_,
+        "showAll": 1
+        }
+
     try:
-        r = requests.get(f'https://campusvarbergtv.se/schemasok/?startDateTime={date_tomorrow}&endDateTime={date_tomorrow}&text={class_}&showAll=1&showAll=1', timeout=10)
+        r = requests.get('https://campusvarbergtv.se/schemasok/', params=params, timeout=10)
         r.raise_for_status()
 
         if r.status_code == 200:

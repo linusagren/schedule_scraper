@@ -3,7 +3,7 @@ from webhook import send_message
 from embed import create_embed
 
 def main():
-    mode = "mock" # live | mock
+    mode = "live" # live | mock
 
     schedule = get_schedule(mode)
 
