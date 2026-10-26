@@ -25,24 +25,26 @@ def get_mock_schedule():
     except FileNotFoundError as err:
         print(err)
 
-def get_raw_schedule(date_tomorrow: str):
+def get_raw_schedule(date_tomorrow: str, url_only = False):
     """
     Attempts to fetch the schedule for class AIU26 from the Campus website.
     """
     class_ = "AIU26"
 
     params = {
-        "startDateTime": date_tomorrow,
-        "endDateTime": date_tomorrow,
-        "text": class_,
-        "showAll": 1
+        "q": class_,
+        "period": "custom",
+        "from": date_tomorrow,
+        "to": date_tomorrow
         }
 
     try:
-        r = requests.get('https://campusvarbergtv.se/schemasok/', params=params, timeout=10)
+        r = requests.get('https://studentvarberg.se/schema/default.aspx', params=params, timeout=10)
         r.raise_for_status()
 
         if r.status_code == 200:
+            if url_only == True:
+                return r.url
             return r.text
         
     except requests.exceptions.Timeout as err:

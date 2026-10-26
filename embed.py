@@ -1,8 +1,13 @@
 import json
 from typing import cast
+from scraper import get_next_day, get_raw_schedule
 
 def create_embed(schedule: dict) -> dict:
     class_name, title, room, start_time, end_time = schedule["class_name"], schedule["title"], schedule["classroom"], schedule["start_time"], schedule["end_time"]
+    schedule_url = get_raw_schedule(get_next_day(), True) # temporary duct tape solution
+
+    if not schedule_url:
+        schedule_url = "https://studentvarberg.se/schema/default.aspx"
 
     with open("embed_template.json", "r", encoding="utf-8") as f:
         embed = cast(dict, json.load(f))
@@ -14,5 +19,7 @@ def create_embed(schedule: dict) -> dict:
     emb["fields"][0]["value"] = room # classroom (e.g. E313)
     emb["fields"][1]["value"] = start_time # start_time
     emb["fields"][2]["value"] = end_time # end_time
+
+    embed["components"][0]["components"][0]["url"] = schedule_url
 
     return embed

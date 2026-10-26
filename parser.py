@@ -4,14 +4,13 @@ import scraper
 def parse_schedule(html: str):
     soup = BeautifulSoup(html, "html.parser")
 
-    title = soup.find("div", class_="title-container")
-    classroom = soup.find("div", class_="room")
-    start_time = soup.find("span", class_="time-start")
-    end_time = soup.find("span", class_="time-end")
-    search_result = soup.find("div", class_="ws-container")
+    title = soup.find("span", class_="name")
+    classroom = soup.find("span", class_="room")
+    time = soup.find("span", class_="time")
+    search_result = soup.find("div", class_="meta")
 
-    if not all([classroom, start_time, end_time]):
-        if search_result is not None and "Sökningen gav inga resultat." in search_result.get_text():
+    if not all([classroom, time]):
+        if search_result is not None and "Inga bokningar matchade din sökning under perioden." in search_result.get_text():
             print("No search results found.")
             return {"status": "no_results"}
 
@@ -19,8 +18,7 @@ def parse_schedule(html: str):
 
     class_name, title = title.get_text().strip().split("- ", 1)
     classroom = classroom.get_text().strip()
-    start_time = start_time.get_text().strip()
-    end_time = end_time.get_text().strip()
+    start_time, end_time = time.get_text().strip().split("–", 1)
 
     class_schedule = {
         "class_name": class_name,

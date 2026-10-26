@@ -1,128 +1,718 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="sv">
 
 <head>
-	<meta charset="UTF-8">
-	<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="../branding.css">
-	<link rel="stylesheet" href="./style.css">
-	<script type="module" src="./_js/main.js" defer></script>
-	<title>Schemasök - Campus Varberg</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="color-scheme" content="light" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+		referrerpolicy="no-referrer" />
+	<title>Schemasökning | Campus Varberg</title>
+	<style>
+		:root {
+			--graphite: #333;
+			--yellow: #ffd65e;
+			--softyellow: #f2d67f;
+			--sand: #f4f1ea;
+			--bg: #f7f7f5;
+			--border: #e3e3e0;
+			--muted: #666
+		}
+
+		* {
+			box-sizing: border-box
+		}
+
+		html {
+			scroll-behavior: smooth
+		}
+
+		body {
+			margin: 0;
+			background: var(--bg);
+			color: var(--graphite);
+			font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Arial, sans-serif
+		}
+
+		.wrap {
+			max-width: 1020px;
+			margin: auto;
+			padding-left: 24px;
+			padding-right: 24px
+		}
+
+		a {
+			color: #4d7182
+		}
+
+		a:focus-visible,
+		button:focus-visible,
+		input:focus-visible,
+		summary:focus-visible {
+			outline: 3px solid #947200;
+			outline-offset: 3px
+		}
+
+		main {
+			padding-top: 43px;
+			padding-bottom: 76px;
+			min-height: 55vh
+		}
+
+		h1 {
+			font-size: clamp(1.4rem, 3vw, 2rem);
+			font-weight: 600;
+			line-height: 1.25;
+			margin: 0 0 29px;
+			letter-spacing: .01em
+		}
+
+		.searchbar {
+			display: flex;
+			align-items: center;
+			gap: 13px;
+			padding: 8px 9px 8px 17px;
+			background: #fff;
+			border: 1px solid var(--border);
+			border-radius: 10px
+		}
+
+		.searchbar .fa-magnifying-glass {
+			color: #777
+		}
+
+		.searchbar input {
+			border: 0;
+			outline: 0;
+			flex: 1;
+			min-width: 0;
+			font: inherit;
+			background: transparent;
+			padding: 11px 0
+		}
+
+		.searchbar button,
+		.custom button {
+			border: 0;
+			border-radius: 7px;
+			background: var(--softyellow);
+			color: #333;
+			font: inherit;
+			font-size: .95rem;
+			padding: 13px 22px;
+			cursor: pointer;
+			white-space: nowrap
+		}
+
+		.searchbar button:hover,
+		.custom button:hover {
+			background: #ead078
+		}
+
+		.filters {
+			display: flex;
+			gap: 9px;
+			flex-wrap: wrap;
+			align-items: center;
+			margin-top: 17px
+		}
+
+		.filters a,
+		.filters summary {
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			background: #fff;
+			border: 1px solid #dcdcdc;
+			color: #333;
+			text-decoration: none;
+			border-radius: 7px;
+			padding: 9px 14px;
+			font-size: .9rem;
+			cursor: pointer
+		}
+
+		.filters a.active,
+		.filters details.selected summary {
+			background: #333;
+			color: #fff;
+			border-color: #333
+		}
+
+		.cache-updated {
+			margin: 12px 0 0;
+			color: #666;
+			font-size: .84rem;
+			line-height: 1.4
+		}
+
+		.filters details {
+			position: relative
+		}
+
+		.filters summary {
+			list-style: none
+		}
+
+		.filters summary::-webkit-details-marker {
+			display: none
+		}
+
+		.custom {
+			background: #fff;
+			border: 1px solid var(--border);
+			border-radius: 10px;
+			margin-top: 14px;
+			padding: 18px;
+			display: grid;
+			grid-template-columns: 1fr 1fr auto;
+			gap: 13px;
+			align-items: end
+		}
+
+		.custom label {
+			display: block;
+			font-size: .9rem;
+			margin-bottom: 5px
+		}
+
+		.custom input {
+			display: block;
+			width: 100%;
+			min-width: 0;
+			padding: 11px;
+			border: 1px solid #aaa;
+			border-radius: 6px;
+			font: inherit
+		}
+
+		.custom button {
+			min-height: 46px
+		}
+
+		.meta {
+			display: flex;
+			align-items: baseline;
+			justify-content: space-between;
+			gap: 12px;
+			margin: 38px 0 15px;
+			padding-bottom: 13px;
+			border-bottom: 1px solid var(--border)
+		}
+
+		.meta h2 {
+			font-size: 1.3rem;
+			font-weight: 600;
+			margin: 0
+		}
+
+		.muted {
+			color: var(--muted);
+			font-size: .86rem
+		}
+
+		.day-calendar {
+			font-size: .92em;
+			color: #777;
+			margin-right: 11px;
+			vertical-align: baseline
+		}
+
+		.day {
+			margin-top: 27px
+		}
+
+		.day h3 {
+			font-size: 1.16rem;
+			font-weight: 600;
+			margin: 0 0 13px
+		}
+
+		.bookings-grid {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr);
+			gap: 13px
+		}
+
+		.booking {
+			display: flex;
+			flex-direction: column;
+			gap: 12px;
+			padding: 18px 19px;
+			background: #fff;
+			border: 1px solid #e5e5e5;
+			border-left: 5px solid var(--softyellow);
+			border-radius: 8px;
+			min-width: 0
+		}
+
+		.booking-line {
+			display: flex;
+			gap: 13px;
+			align-items: flex-start;
+			min-width: 0
+		}
+
+		.booking-line .fa-solid {
+			width: 19px;
+			flex: 0 0 19px;
+			text-align: center;
+			color: #858585;
+			margin-top: 4px
+		}
+
+		.time {
+			font-variant-numeric: tabular-nums;
+			font-weight: 400
+		}
+
+		.name,
+		.room {
+			font-weight: 400;
+			overflow-wrap: anywhere
+		}
+
+		.notice {
+			background: #fff2cc;
+			border-left: 3px solid #b78a16;
+			padding: 13px 15px;
+			margin: 18px 0;
+			border-radius: 5px
+		}
+
+		.empty {
+			background: white;
+			border: 1px solid var(--border);
+			padding: 25px;
+			border-radius: 9px
+		}
+
+		.backtotop {
+			max-width: 1020px;
+			margin: 0 auto -23px;
+			display: flex;
+			justify-content: flex-end;
+			position: relative;
+			z-index: 2;
+			padding-right: 24px
+		}
+
+		.backtotop a {
+			display: inline-block;
+			background: #333;
+			color: #fff;
+			text-decoration: none;
+			font-size: .77rem;
+			padding: 10px 15px
+		}
+
+		.wave {
+			display: block;
+			width: 100%;
+			height: 56px;
+			margin-bottom: -1px
+		}
+
+		.footer-main {
+			background: var(--sand);
+			padding: 27px 0 53px
+		}
+
+		.footer-grid {
+			display: grid;
+			grid-template-columns: 39% 1fr;
+			gap: 58px
+		}
+
+		.footer-contact {
+			border-right: 1px solid #9ca5a9;
+			padding-right: 45px
+		}
+
+		.footer-logo {
+			width: 235px;
+			max-width: 100%;
+			height: auto;
+			display: block;
+			margin-bottom: 22px
+		}
+
+		.footer-main h2 {
+			font: normal 1.8rem/1.2 Georgia, "Times New Roman", serif;
+			margin: 0 0 8px
+		}
+
+		.footer-main h3 {
+			font-size: 1rem;
+			margin: 17px 0 3px
+		}
+
+		.footer-main p {
+			margin: 0 0 12px;
+			line-height: 1.5
+		}
+
+		.footer-about {
+			padding-top: 70px
+		}
+
+		.footer-about h2:not(:first-child) {
+			margin-top: 20px
+		}
+
+		.social {
+			display: flex;
+			gap: 13px;
+			margin-top: 12px
+		}
+
+		.social a {
+			width: 45px;
+			height: 45px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border: 1px solid #333;
+			border-radius: 50%;
+			color: #4d7182;
+			text-decoration: none;
+			font-size: 1.3rem
+		}
+
+		.social a:hover {
+			background: #fff
+		}
+
+		.municipal {
+			background: #333;
+			color: #fff;
+			text-align: center;
+			padding: 15px 20px;
+			font-size: .79rem
+		}
+
+		.municipal-logo {
+			display: block;
+			width: 190px;
+			max-width: 100%;
+			height: auto;
+			margin: 0 auto 7px
+		}
+
+		.legal {
+			background: #fff;
+			text-align: center;
+			padding: 12px 20px;
+			font-size: .78rem;
+			line-height: 1.9
+		}
+
+		.legal a {
+			margin: 0 9px
+		}
+
+		@media(max-width:700px) {
+			.wrap {
+				padding-left: 17px;
+				padding-right: 17px
+			}
+
+			main {
+				padding-top: 30px;
+				padding-bottom: 56px
+			}
+
+			h1 {
+				font-size: 1.35rem;
+				margin-bottom: 24px
+			}
+
+			.searchbar {
+				gap: 8px;
+				padding: 6px 6px 6px 11px
+			}
+
+			.searchbar input {
+				font-size: .82rem
+			}
+
+			.searchbar button {
+				font-size: .8rem;
+				padding: 13px 11px
+			}
+
+			.filters {
+				gap: 7px
+			}
+
+			.filters a,
+			.filters summary {
+				font-size: .83rem;
+				padding: 9px 11px
+			}
+
+			.custom {
+				grid-template-columns: 1fr 1fr
+			}
+
+			.custom button {
+				grid-column: 1/-1
+			}
+
+			.bookings-grid {
+				grid-template-columns: 1fr
+			}
+
+			.booking {
+				padding: 16px
+			}
+
+			.meta {
+				margin-top: 31px
+			}
+
+			.meta h2 {
+				font-size: 1.16rem
+			}
+
+			.backtotop {
+				padding-right: 17px
+			}
+
+			.footer-grid {
+				grid-template-columns: 1fr;
+				gap: 24px
+			}
+
+			.footer-contact {
+				border-right: 0;
+				border-bottom: 1px solid #c6c1b8;
+				padding-right: 0;
+				padding-bottom: 19px
+			}
+
+			.footer-about {
+				padding-top: 0
+			}
+
+			.footer-main {
+				padding: 23px 0 38px
+			}
+
+			.footer-logo {
+				width: 210px
+			}
+
+			.footer-main h2 {
+				font-size: 1.6rem
+			}
+
+			.wave {
+				height: 38px
+			}
+		}
+
+		@media(max-width:370px) {
+			.searchbar {
+				flex-wrap: wrap
+			}
+
+			.searchbar input {
+				flex-basis: calc(100% - 40px)
+			}
+
+			.searchbar button {
+				width: 100%
+			}
+
+			.custom {
+				grid-template-columns: 1fr
+			}
+		}
+
+		/* Varmt sidhuvud med kalenderikon och mjuk övergång */
+		.schema-hero {
+			background: var(--bg);
+		}
+
+		.hero-inner {
+			background: var(--sand);
+			padding-top: 48px;
+			padding-bottom: 26px;
+			max-width: none;
+			padding-left: max(24px, calc((100vw - 1020px)/2 + 24px));
+			padding-right: max(24px, calc((100vw - 1020px)/2 + 24px))
+		}
+
+		.schema-hero h1 {
+			display: flex;
+			align-items: center;
+			gap: 16px;
+			margin: 0 0 12px;
+			font-size: clamp(1.4rem, 3vw, 2rem);
+			font-weight: 600;
+			line-height: 1.3
+		}
+
+		.schema-hero h1 i {
+			font-size: .95em;
+			flex: none;
+			color: #333
+		}
+
+		.schema-hero p {
+			margin: 0;
+			color: #666;
+			font-size: .95rem
+		}
+
+		.hero-wave {
+			display: block;
+			width: 100%;
+			height: 48px;
+			background: var(--bg)
+		}
+
+		.schema-hero+main {
+			position: relative;
+			z-index: 1;
+			margin-top: 5px;
+			padding-top: 0
+		}
+
+		@media(max-width:700px) {
+			.hero-inner {
+				padding: 32px 17px 23px
+			}
+
+			.schema-hero h1 {
+				gap: 11px;
+				font-size: 1.32rem
+			}
+
+			.schema-hero p {
+				font-size: .86rem
+			}
+
+			.hero-wave {
+				height: 33px
+			}
+
+			.schema-hero+main {
+				margin-top: 5px;
+				padding-top: 0
+			}
+		}
+	</style>
 </head>
 
-<body>
-
-	<header class="ws-container">
-		<!-- CAMPUS CLICKABLE LOGO -->
-		<a id="campus-logo" href="/schemasok/" draggable="false" class="noselect">
-			<img src="/public/campus-varberg-liggande.svg" alt="Campus Varberg" draggable="false" />
-		</a>
-
-		<h1>Schemasök</h1>
+<body id="top">
+	<header class="schema-hero">
+		<div class="wrap hero-inner">
+			<h1><i class="fa-solid fa-calendar-days" aria-hidden="true"></i><span>SCHEMA - CAMPUS VARBERG</span></h1>
+			<p>Hitta ditt schema, dina tider och dina salar.</p>
+		</div>
+		<svg class="hero-wave" viewBox="0 0 1200 48" preserveAspectRatio="none" aria-hidden="true">
+			<path d="M0 0H1200V20C990 46 820 46 610 24S240 4 0 33Z" fill="#f4f1ea" />
+		</svg>
 	</header>
-
-	<!-- SEARCH FORM -->
-	<section id="search-form" class="ws-container">
-		<form action="" method="GET">
-			<div class="form-row">
-				<div class="form-group">
-					<label for="startDateTime">Från</label>
-					<input type="date" name="startDateTime" id="startDateTime" value="2026-10-20">
-				</div>
-
-				<div class="form-group">
-					<label for="endDateTime">Till</label>
-					<input type="date" name="endDateTime" id="endDateTime" value="2026-10-20">
-				</div>
-			</div>
-
-			<div class="form-row">
-				<div class="form-group full-width">
-					<label for="text">Sök</label>
-					<input type="text" name="text" id="text" placeholder="Sök efter bokning..." value="AIU26">
-				</div>
-			</div>
-
-			<!-- FILTER TYPES -->
-
-			<label class="checkbox-item noselect">
-				<input type="checkbox" name="showAll" id="showCompleted" value="1" checked>
-				Inkludera bokningar vars sluttid har passerat
-			</label>
-
-			<button type="submit" class="nav-btn">Hitta bokningar</button>
-
-			<a href="./" draggable="false" id="clear-filters" class="noselect">Nollställ filter</a>
+	<main class="wrap">
+		<form class="searchbar" method="get" action="default.aspx" role="search">
+			<i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+			<input type="search" aria-label="Sök klass, utbildning eller sal" id="q" name="q" value="AIU26"
+				placeholder="Exempel: SSK, MVA, EVI" maxlength="100" />
+			<input type="hidden" name="period" value="custom" />
+			<input type="hidden" name="from" value="2026-10-27" /><input type="hidden" name="to" value="2026-10-27" />
+			<button type="submit">Sök schema</button>
 		</form>
-	</section>
+		<nav class="filters" aria-label="Välj tidsperiod">
+			<a href="?period=today&amp;q=AIU26" class="">Idag</a>
+			<a href="?period=week&amp;q=AIU26" class="">Denna vecka</a>
+			<a href="?period=next&amp;q=AIU26" class="">Nästa vecka</a>
+			<details class="selected" id="date-filter" open>
+				<summary><i class="fa-regular fa-calendar-days" aria-hidden="true"></i> Välj datum</summary>
+			</details>
+		</nav>
+		<div id="custom-range">
+			<form class="custom" method="get" action="default.aspx">
+				<input type="hidden" name="period" value="custom" />
+				<input type="hidden" name="q" value="AIU26" />
+				<div><label for="from">Från</label><input type="date" id="from" name="from" value="2026-10-27"
+						required /></div>
+				<div><label for="to">Till</label><input type="date" id="to" name="to" value="2026-10-27" required />
+				</div>
+				<button type="submit">Visa perioden</button>
+			</form>
+		</div>
 
-	<main>
-		<div id="search-context" class="ws-container">
+		<p class="cache-updated">Aktuellt schema h&#228;mtades klockan 12.40 den 26 oktober 2026</p>
 
-			<p>
-				Sökningen gav 1 resultat.
-			</p>
+		<div class="meta">
+			<h2>Ditt schema</h2><span class="muted">1 bokningar</span>
+		</div>
 
-			<div id="search-results">
+		<section class="day" aria-label="Tisdag 27 oktober">
+			<h3><i class="fa-regular fa-calendar-days day-calendar" aria-hidden="true"></i>Tisdag 27 oktober</h3>
+			<div class="bookings-grid">
 
-
-				<!-- ARTICLE CARD / SEARCH RESULT -->
-				<article class="card">
-					<div class="title-container">
-						<img class="icon" aria-hidden="true" src="/public/icons/hogskola-yrkeshogskola.svg">
-						<h3>AIU26- Grundläggande programmering med Python</h3>
-					</div>
-
-					<time class="time-container" datetime="2026-10-20 08:30">
-						<img class="icon" aria-hidden="true" src="/public/icons/clock.svg">
-
-						<div class="time-content">
-							<div class="start-end-container">
-								<span class="time-start">20 oktober, 08.30</span>
-								<div>
-									&ndash; <span class="time-end">
-										17.00 </span>
-								</div>
-							</div>
-
-							<!-- p class="time-duration"> =php=htmlspecialchars($r->duration)=php= -->
-						</div>
-					</time>
-
-					<div class="location-container">
-						<div class="building">
-							<img class="icon" aria-hidden="true" src="/public/icons/house.svg">
-							B
-						</div>
-						<div class="room">
-							<img class="icon" aria-hidden="true" src="/public/icons/door.svg">
-							B126
-						</div>
-					</div>
-
-
-					<div class="description-section">
-						<p class="no-description">Ingen beskrivning tillgänglig</p>
-					</div>
-
+				<article class="booking">
+					<div class="booking-line"><i class="fa-solid fa-clock" aria-hidden="true"></i><span
+							class="time">08.30–17.00</span></div>
+					<div class="booking-line"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i><span
+							class="name">AIU26- Grundl&#228;ggande programmering med Python</span></div>
+					<div class="booking-line"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><span
+							class="room">E117</span></div>
 				</article>
 			</div>
+		</section>
 
-			<nav id="search-pagination">
-				<a href="?" class="nav-btn disabled">
-					Föregående
-				</a>
-
-				<span class="page-indicator">
-					<strong>1</strong> / 1 </span>
-
-				<a href="?" class="nav-btn disabled">
-					Nästa
-				</a>
-			</nav>
-		</div>
 	</main>
+	<div class="backtotop"><a href="#top">TILLBAKA TILL TOPPEN</a></div>
+	<svg class="wave" viewBox="0 0 1200 56" preserveAspectRatio="none" aria-hidden="true">
+		<path fill="#f4f1ea" d="M0 27 C160 -6 310 8 460 26 S750 53 905 29 S1090 15 1200 25 L1200 56 L0 56Z" />
+	</svg>
+	<footer>
+		<div class="footer-main">
+			<div class="wrap footer-grid">
+				<div class="footer-contact">
+					<img class="footer-logo" src="campus-logo.png" alt="Campus Varberg" width="235" height="73" />
+					<h2>Kontakt</h2>
+					<h3>Besöksadress</h3>
+					<p>Otto Torells gata 20<br />432 44 Varberg</p>
+					<h3>E-post</h3>
+					<p><a href="mailto:info@campus.varberg.se">info@campus.varberg.se</a></p>
+					<h3>Telefon</h3>
+					<p><a href="tel:+46340697400">0340-69 74 00</a></p>
+				</div>
+				<div class="footer-about">
+					<h2>Om Campus Varberg</h2>
+					<p>Campus Varbergs verksamhetsidé är att agera mötesplats, mäklare och motor. Med ett nytänkande
+						sätt att se på omvärldens behov skapar vi mötesplatser, mäklar kunskap och är en motor för
+						utveckling. <a href="https://www.campus.varberg.se">Läs mer om Campus Varberg.</a></p>
+					<h2>Sociala medier</h2>
+					<div class="social">
+						<a href="https://www.instagram.com/campusvarberg/" aria-label="Campus Varberg på Instagram"
+							target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"
+								aria-hidden="true"></i></a>
+						<a href="https://www.linkedin.com/school/5200591/" aria-label="Campus Varberg på LinkedIn"
+							target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-linkedin-in"
+								aria-hidden="true"></i></a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="municipal"><img src="varbergs-kommun-logo.png" alt="Varbergs kommun" class="municipal-logo"
+				width="190" height="61" />Campus Varberg är en del av utbildnings- och arbetsmarknadsförvaltningen i
+			Varbergs kommun</div>
+
+	</footer>
+	<script>
+		(function () {
+			var details = document.getElementById('date-filter');
+			var panel = document.getElementById('custom-range');
+			details.addEventListener('toggle', function () { panel.hidden = !details.open; });
+		})();
+	</script>
 </body>
 
 </html>
